@@ -36,6 +36,23 @@ height: 12px;
         -webkit-backface-visibility: hidden;
 }
 
+.agenda-item-description #title-main {
+  text-transform: capitalize;
+  font-weight: bold;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.agenda-item-description #title {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.agenda-item-description #description {
+  text-transform: capitalize;
+  margin-left: 10px;
+}
+
 .agenda-item-description {
   padding: 8px;
   font-size: 12px;
@@ -46,7 +63,7 @@ height: 12px;
 }
 
 .agenda-item-description small {
-  color:#ff0000;
+  color:#009BFF;
   font-size: 12px;
 }
 
