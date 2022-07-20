@@ -176,7 +176,7 @@ This component is used to display the details of a single event in the agenda , 
 var AgendaItem = function(props){
   console.log( ' item component props' , props)
   return <div style={{display:'block', position:'absolute' , background:'#FFF'}}>
-        {props.item.name}
+        {props.item.title}
         <button onClick={()=> props.edit(props.item)}>Edit </button>
          </div>
 }
