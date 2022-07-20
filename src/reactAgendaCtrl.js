@@ -64,7 +64,7 @@ export default class ReactAgendaCtrl extends Component {
 
       return this.setState({
         editMode: true,
-        name: this.props.selectedCells[0].title,
+        title: this.props.selectedCells[0].title,
         classes: this.props.selectedCells[0].classes,
         startDateTime: start,
         endDateTime: endT,
@@ -250,7 +250,7 @@ export default class ReactAgendaCtrl extends Component {
           <form onSubmit={this.handleEdit}>
             <div className="agendCtrls-label-wrapper">
               <div className="agendCtrls-label-inline">
-                <label>Event name</label>
+                <label>Agendamento</label>
                 <input
                   type="text"
                   name="name"
@@ -259,7 +259,7 @@ export default class ReactAgendaCtrl extends Component {
                   className="agendCtrls-event-input"
                   value={this.state.title}
                   onChange={this.handleChange.bind(this)}
-                  placeholder="Event Name"
+                  placeholder="Agendamento"
                 />
               </div>
               <div className="agendCtrls-label-inline ">
@@ -269,7 +269,7 @@ export default class ReactAgendaCtrl extends Component {
             </div>
             <div className="agendCtrls-timePicker-wrapper">
               <div className="agendCtrls-time-picker">
-                <label>Start Date</label>
+                <label>Data inicio</label>
                 <Rdate
                   value={this.state.startDateTime}
                   onChange={this.handleDateChange.bind(null, "startDateTime")}
@@ -278,7 +278,7 @@ export default class ReactAgendaCtrl extends Component {
                 ></Rdate>
               </div>
               <div className="agendCtrls-time-picker">
-                <label>End Date</label>
+                <label>Data final</label>
                 <Rdate
                   value={this.state.endDateTime}
                   onChange={this.handleDateChange.bind(null, "endDateTime")}
@@ -299,7 +299,7 @@ export default class ReactAgendaCtrl extends Component {
         <form onSubmit={this.handleSubmit}>
           <div className="agendCtrls-label-wrapper">
             <div className="agendCtrls-label-inline">
-              <label>Event name</label>
+              <label>Agendamento</label>
               <input
                 type="text"
                 ref="eventName"
@@ -308,7 +308,7 @@ export default class ReactAgendaCtrl extends Component {
                 className="agendCtrls-event-input"
                 value={this.state.title}
                 onChange={this.handleChange.bind(this)}
-                placeholder="Event Name"
+                placeholder="Agendamento"
               />
             </div>
             <div className="agendCtrls-label-inline">

@@ -122,10 +122,16 @@ export default class ReactAgendaItem extends Component {
           <section id="description">
             {this.props.item.collaborator.name}
           </section>
-          <section id="title">Local: </section>
-          <section id="description">
-            {this.props.item.place}, {this.props.item.placeNumber}
-          </section>
+          {this.props.item.place ? (
+            <>
+              <section id="title">Local: </section>
+              <section id="description">
+                {this.props.item.place}, {this.props.item.placeNumber}
+              </section>
+            </>
+          ) : (
+            <></>
+          )}
           <small>
             {duratL} - {duratE}
           </small>
