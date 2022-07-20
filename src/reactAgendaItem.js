@@ -24,7 +24,7 @@ export default class ReactAgendaItem extends Component {
   updateDimensions() {
     var elem = document.getElementById(this.props.parent);
     if (elem) {
-      var nwidh = elem.offsetWidth / 1.4;
+      var nwidh = elem.offsetWidth / 0.9;
       var nmrgl =
         this.props.padder > 0 ? nwidh / 5 + this.props.padder * 8 : nwidh / 5;
 
@@ -117,10 +117,17 @@ export default class ReactAgendaItem extends Component {
         </div>
 
         <div className="agenda-item-description">
-          <section>{this.props.item.title}</section>
-          <section>{this.props.item.collaboratorName}</section>
+          <section id="title-main">{this.props.item.title}</section>
+          <section id="title">Colaborador: </section>
+          <section id="description">
+            {this.props.item.collaborator.name}
+          </section>
+          <section id="title">Local: </section>
+          <section id="description">
+            {this.props.item.place}, {this.props.item.placeNumber}
+          </section>
           <small>
-            , {duratL} - {duratE} , {duratH}
+            {duratL} - {duratE}
           </small>
         </div>
       </div>

@@ -23,7 +23,7 @@ height: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-     padding: 0;
+    padding: 0;
     position: absolute;
     background: rgba(251, 251, 251, 1);
     margin: -2px;
