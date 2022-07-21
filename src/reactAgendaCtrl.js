@@ -94,6 +94,17 @@ export default class ReactAgendaCtrl extends Component {
     }
   }
 
+  handleChange(event) {
+    if (event.target.tagName === "BUTTON") {
+      event.preventDefault();
+    }
+
+    var data = this.state;
+    data[event.target.title] = event.target.value;
+
+    this.setState(data);
+  }
+
   handleChangeTitle(event) {
     if (event.target.tagName === "BUTTON") {
       event.preventDefault();
