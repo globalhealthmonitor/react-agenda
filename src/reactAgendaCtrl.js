@@ -19,8 +19,6 @@ export default class ReactAgendaCtrl extends Component {
       classes: "priority-1",
       startDateTime: now,
       endDateTime: now,
-      collaborators: [],
-      collaborator: {},
     };
     this.handleDateChange = this.handleDateChange.bind(this);
     this.addEvent = this.addEvent.bind(this);
@@ -229,6 +227,7 @@ export default class ReactAgendaCtrl extends Component {
   }
 
   render() {
+    console.log("Collaboradores", this.state.collaborators);
     var itc = Object.keys(this.props.itemColors);
     var colors = itc.map(
       function (item, idx) {
@@ -348,7 +347,7 @@ export default class ReactAgendaCtrl extends Component {
                   </select>
                 </div>
               ) : (
-                <div></div>
+                <div>Nada rapaz</div>
               )}
             </div>
           </div>
@@ -381,6 +380,7 @@ export default class ReactAgendaCtrl extends Component {
 }
 
 ReactAgendaCtrl.propTypes = {
+  collaborators: PropTypes.array,
   items: PropTypes.array,
   itemColors: PropTypes.object,
   selectedCells: PropTypes.array,
@@ -389,6 +389,7 @@ ReactAgendaCtrl.propTypes = {
 };
 
 ReactAgendaCtrl.defaultProps = {
+  collaborators: [],
   items: [],
   itemColors: {},
   selectedCells: [],
