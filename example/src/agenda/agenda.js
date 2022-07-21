@@ -217,6 +217,7 @@ export default class Agenda extends Component {
   }
 
   handleItemChange(items, item) {
+    console.log(items, item);
     this.setState({ items: items });
   }
 
@@ -229,10 +230,12 @@ export default class Agenda extends Component {
   }
 
   addNewEvent(items, newItems) {
+    console.log(items, newItems);
     this.setState({ showModal: false, selected: [], items: items });
     this._closeModal();
   }
   editEvent(items, item) {
+    console.log(items, item);
     this.setState({ showModal: false, selected: [], items: items });
     this._closeModal();
   }
@@ -248,7 +251,7 @@ export default class Agenda extends Component {
         <div
           style={{ display: "block", position: "absolute", background: "#FFF" }}
         >
-          {props.item.title}{" "}
+          {props.item.name}{" "}
           <button onClick={() => props.edit(props.item)}>Edit </button>
         </div>
       );

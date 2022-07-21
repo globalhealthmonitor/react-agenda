@@ -19,6 +19,8 @@ export default class ReactAgendaCtrl extends Component {
       classes: "priority-1",
       startDateTime: now,
       endDateTime: now,
+      collaborators: [],
+      collaborator: {},
     };
     this.handleDateChange = this.handleDateChange.bind(this);
     this.addEvent = this.addEvent.bind(this);
@@ -94,13 +96,26 @@ export default class ReactAgendaCtrl extends Component {
     }
   }
 
-  handleChange(event) {
+  handleChangeTitle(event) {
     if (event.target.tagName === "BUTTON") {
       event.preventDefault();
     }
 
     var data = this.state;
     data[event.target.title] = event.target.value;
+
+    this.setState(data);
+  }
+
+  handleChangeCollaborator(event) {
+    if (event.target.tagName === "BUTTON") {
+      event.preventDefault();
+    }
+
+    var data = this.state;
+    console.log(data);
+    console.log(event.target);
+    data[event.target.collaborator] = event.target.value;
 
     this.setState(data);
   }
@@ -251,9 +266,9 @@ export default class ReactAgendaCtrl extends Component {
             <div className="agendCtrls-label-wrapper">
               <div className="agendCtrls-label-inline">
                 <label>Agendamento</label>
-                <input
+                <select
                   type="text"
-                  name="name"
+                  name="collaborator"
                   autoFocus
                   ref="eventName"
                   className="agendCtrls-event-input"
@@ -307,7 +322,7 @@ export default class ReactAgendaCtrl extends Component {
                 name="name"
                 className="agendCtrls-event-input"
                 value={this.state.title}
-                onChange={this.handleChange.bind(this)}
+                onChange={this.handleChangeTitle.bind(this)}
                 placeholder="Agendamento"
               />
             </div>
@@ -316,9 +331,30 @@ export default class ReactAgendaCtrl extends Component {
               <div className="agendCtrls-radio-wrapper">{colors}</div>
             </div>
           </div>
+          <div className="agendCtrls-label-wrapper">
+            <div className="agendCtrls-label-inline">
+              {this.state.collaborators.length > 0 ? (
+                <div>
+                  <label>Colaborador</label>
+                  <select
+                    value={this.state.collaborator.name}
+                    onChange={this.handleChangeCollaborator.bind(this)}
+                  >
+                    {this.state.collaborators.map((collaborator) => (
+                      <option key={collaborator.id} value={collaborator.name}>
+                        {collaborator.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div></div>
+              )}
+            </div>
+          </div>
           <div className="agendCtrls-timePicker-wrapper">
             <div className="agendCtrls-time-picker">
-              <label>Start Date</label>
+              <label>Data inicio</label>
               <Rdate
                 value={this.state.startDateTime}
                 onChange={this.handleDateChange.bind(null, "startDateTime")}
@@ -327,7 +363,7 @@ export default class ReactAgendaCtrl extends Component {
               ></Rdate>
             </div>
             <div className="agendCtrls-time-picker">
-              <label>End Date</label>
+              <label>Data final</label>
               <Rdate
                 value={this.state.endDateTime}
                 onChange={this.handleDateChange.bind(null, "endDateTime")}

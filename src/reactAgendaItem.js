@@ -123,14 +123,14 @@ export default class ReactAgendaItem extends Component {
             {this.props.item.collaborator.name}
           </section>
           {this.props.item.place ? (
-            <>
+            <div>
               <section id="title">Local: </section>
               <section id="description">
                 {this.props.item.place}, {this.props.item.placeNumber}
               </section>
-            </>
+            </div>
           ) : (
-            <></>
+            <div></div>
           )}
           <small>
             {duratL} - {duratE}
