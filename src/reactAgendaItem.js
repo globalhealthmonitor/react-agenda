@@ -132,6 +132,8 @@ export default class ReactAgendaItem extends Component {
           ) : (
             <div></div>
           )}
+          <section id="title">Observação: </section>
+          <section id="description">{this.props.item.observation}</section>
           <small>
             {duratL} - {duratE}
           </small>

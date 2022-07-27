@@ -75,10 +75,36 @@
   padding: 8px;
 }
 
+.agendCtrls-label-inline-collaborator {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+.agendCtrls-label-inline-collaborator label{
+  font-size: 15px;
+  font-weight: 600;
+  align-self: flex-start;
+  padding: 8px;
+}
+
 .agendCtrls-label-inline {
   display: flex;
-      flex-direction: column;
-      width: 50%;
+  flex-direction: column;
+  width: 50%;
+}
+
+.agendCtrls-label-inline-obs{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+.agendCtrls-label-inline-obs label {
+  font-size: 15px;
+  font-weight: 600;
+  align-self: flex-start;
+  padding: 8px;
 }
 
 .agendCtrls-label-inline label{

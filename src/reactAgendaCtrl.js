@@ -15,13 +15,15 @@ export default class ReactAgendaCtrl extends Component {
       editMode: false,
       showCtrl: false,
       multiple: {},
-      name: "",
+      title: "",
+      collaborator: {},
       classes: "priority-1",
       startDateTime: now,
       endDateTime: now,
     };
     this.handleDateChange = this.handleDateChange.bind(this);
     this.addEvent = this.addEvent.bind(this);
+    this.searchEvent = this.searchEvent.bind(this);
     this.updateEvent = this.updateEvent.bind(this);
     this.dispatchEvent = this.dispatchEvent.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,7 +50,7 @@ export default class ReactAgendaCtrl extends Component {
       let endT = moment(now).add(15, "Minutes");
       return this.setState({
         editMode: false,
-        name: "",
+        title: "",
         startDateTime: start,
         endDateTime: endT,
       });
@@ -65,6 +67,10 @@ export default class ReactAgendaCtrl extends Component {
       return this.setState({
         editMode: true,
         title: this.props.selectedCells[0].title,
+        collaborator: this.props.selectedCells[0].collaborator,
+        place: this.props.selectedCells[0].place,
+        placeNumber: this.props.selectedCells[0].placeNumber,
+        observation: this.props.selectedCells[0].observation,
         classes: this.props.selectedCells[0].classes,
         startDateTime: start,
         endDateTime: endT,
@@ -76,7 +82,7 @@ export default class ReactAgendaCtrl extends Component {
       let endT = moment(getLast(this.props.selectedCells)).add(15, "Minutes");
       return this.setState({
         editMode: false,
-        name: "",
+        title: "",
         startDateTime: start,
         endDateTime: endT,
       });
@@ -87,11 +93,22 @@ export default class ReactAgendaCtrl extends Component {
       let endT = moment(getLast(this.props.selectedCells)) || now;
       this.setState({
         editMode: false,
-        name: "",
+        title: "",
         startDateTime: start,
         endDateTime: endT,
       });
     }
+  }
+
+  handleChangeColor(event) {
+    if (event.target.tagName === "BUTTON") {
+      event.preventDefault();
+    }
+
+    var data = this.state;
+    data["classes"] = event.target.value;
+
+    this.setState(data);
   }
 
   handleChange(event) {
@@ -100,18 +117,47 @@ export default class ReactAgendaCtrl extends Component {
     }
 
     var data = this.state;
-    data[event.target.title] = event.target.value;
+    data["title"] = event.target.value;
 
     this.setState(data);
   }
 
-  handleChangeTitle(event) {
+  handleChangeSearchCollaborator(event) {
+    var data = this.state;
+    data["searchCollaborator"] = event.target.value;
+
+    this.setState(data);
+  }
+
+  handleChangePlace(event) {
     if (event.target.tagName === "BUTTON") {
       event.preventDefault();
     }
 
     var data = this.state;
-    data[event.target.title] = event.target.value;
+    data["place"] = event.target.value;
+
+    this.setState(data);
+  }
+
+  handleChangeObservation(event) {
+    if (event.target.tagName === "BUTTON") {
+      event.preventDefault();
+    }
+
+    var data = this.state;
+    data["observation"] = event.target.value;
+
+    this.setState(data);
+  }
+
+  handleChangePlaceNumber(event) {
+    if (event.target.tagName === "BUTTON") {
+      event.preventDefault();
+    }
+
+    var data = this.state;
+    data["placeNumber"] = event.target.value;
 
     this.setState(data);
   }
@@ -122,10 +168,13 @@ export default class ReactAgendaCtrl extends Component {
     }
 
     var data = this.state;
-    console.log(data);
-    console.log(event.target);
-    data[event.target.collaborator] = event.target.value;
-
+    const name = event.target.value;
+    const id = event.target.selectedOptions[0].id;
+    data["collaboratorName"] = name;
+    data["collaborator"] = {
+      name,
+      id,
+    };
     this.setState(data);
   }
 
@@ -156,6 +205,10 @@ export default class ReactAgendaCtrl extends Component {
           var lasobj = {
             _id: guid(),
             title: obj.title,
+            collaborator: obj.collaborator,
+            place: obj.place,
+            placeNumber: obj.placeNumber,
+            observation: obj.observation,
             startDateTime: new Date(start),
             endDateTime: new Date(endT),
             classes: obj.classes,
@@ -173,7 +226,7 @@ export default class ReactAgendaCtrl extends Component {
   }
 
   addEvent(e) {
-    if (this.state.title.length < 1) {
+    if (this.state.title.length < 1 && !this.state.collaborator) {
       return;
     }
 
@@ -187,7 +240,11 @@ export default class ReactAgendaCtrl extends Component {
 
       if (Object.values(obj).length > 1) {
         var newObj = {
-          name: this.state.title,
+          title: this.state.title,
+          collaborator: this.state.collaborator,
+          place: this.state.place,
+          placeNumber: this.state.placeNumber,
+          observation: obj.observation,
           startDateTime: new Date(this.state.startDateTime),
           endDateTime: new Date(this.state.endDateTime),
           classes: this.state.classes,
@@ -199,7 +256,11 @@ export default class ReactAgendaCtrl extends Component {
     }
 
     var newObj = {
-      name: this.state.title,
+      title: this.state.title,
+      collaborator: this.state.collaborator,
+      place: this.state.place,
+      placeNumber: this.state.placeNumber,
+      observation: this.state.observation,
       startDateTime: new Date(this.state.startDateTime),
       endDateTime: new Date(this.state.endDateTime),
       classes: this.state.classes,
@@ -208,11 +269,22 @@ export default class ReactAgendaCtrl extends Component {
     this.dispatchEvent(newObj);
   }
 
+  searchEvent(e) {
+    this.props.searchCollaborator({
+      searchCollaborator: this.state.searchCollaborator,
+    });
+  }
+
   updateEvent(e) {
     if (this.props.selectedCells[0]._id && this.props.items) {
       var newObj = {
         _id: this.props.selectedCells[0]._id,
-        name: this.state.title,
+        id: this.props.selectedCells[0].id,
+        title: this.state.title,
+        collaborator: this.state.collaborator,
+        place: this.state.place,
+        placeNumber: this.state.placeNumber,
+        observation: this.state.observation,
         startDateTime: new Date(this.state.startDateTime),
         endDateTime: new Date(this.state.endDateTime),
         classes: this.state.classes,
@@ -238,7 +310,6 @@ export default class ReactAgendaCtrl extends Component {
   }
 
   render() {
-    console.log("Collaboradores", this.state.collaborators);
     var itc = Object.keys(this.props.itemColors);
     var colors = itc.map(
       function (item, idx) {
@@ -258,7 +329,7 @@ export default class ReactAgendaCtrl extends Component {
                   ? "agendCtrls-radio-button--checked"
                   : "agendCtrls-radio-button"
               }
-              onClick={this.handleChange.bind(this)}
+              onClick={this.handleChangeColor.bind(this)}
             />
           </div>
         );
@@ -275,21 +346,75 @@ export default class ReactAgendaCtrl extends Component {
           <form onSubmit={this.handleEdit}>
             <div className="agendCtrls-label-wrapper">
               <div className="agendCtrls-label-inline">
-                <label>Agendamento</label>
-                <select
+                <label>Titulo</label>
+                <input
                   type="text"
-                  name="collaborator"
+                  name="name"
                   autoFocus
                   ref="eventName"
                   className="agendCtrls-event-input"
                   value={this.state.title}
                   onChange={this.handleChange.bind(this)}
-                  placeholder="Agendamento"
+                  placeholder="Titulo"
                 />
               </div>
-              <div className="agendCtrls-label-inline ">
+              <div className="agendCtrls-label-inline">
                 <label>Color</label>
                 <div className="agendCtrls-radio-wrapper">{colors}</div>
+              </div>
+            </div>
+            <div className="agendCtrls-label-inline">
+              <label>Colaborador</label>
+              <option
+                disabled
+                id={this.state.collaborator.id}
+                key={this.state.collaborator.id}
+                value={this.state.collaborator.name}
+              >
+                {this.state.collaborator.name}
+              </option>
+            </div>
+            <div className="agendCtrls-label-wrapper">
+              <div className="agendCtrls-label-inline">
+                <label>Local</label>
+                <input
+                  type="text"
+                  ref="eventName"
+                  autoFocus
+                  name="name"
+                  className="agendCtrls-event-input"
+                  value={this.state.place}
+                  onChange={this.handleChangePlace.bind(this)}
+                  placeholder="Rua ..."
+                />
+              </div>
+              <div className="agendCtrls-label-inline">
+                <label>Numero</label>
+                <input
+                  type="text"
+                  ref="eventName"
+                  autoFocus
+                  name="name"
+                  className="agendCtrls-event-input"
+                  value={this.state.placeNumber}
+                  onChange={this.handleChangePlaceNumber.bind(this)}
+                  placeholder="123"
+                />
+              </div>
+            </div>
+            <div className="agendCtrls-label-wrapper">
+              <div className="agendCtrls-label-inline-obs">
+                <label>Observação:</label>
+                <input
+                  type="text"
+                  ref="eventName"
+                  autoFocus
+                  name="name"
+                  className="agendCtrls-event-input"
+                  value={this.state.observation}
+                  onChange={this.handleChangeObservation.bind(this)}
+                  placeholder="Observação"
+                />
               </div>
             </div>
             <div className="agendCtrls-timePicker-wrapper">
@@ -312,7 +437,6 @@ export default class ReactAgendaCtrl extends Component {
                 ></Rdate>
               </div>
             </div>
-
             <input type="submit" value="Save" />
           </form>
         </div>
@@ -324,7 +448,7 @@ export default class ReactAgendaCtrl extends Component {
         <form onSubmit={this.handleSubmit}>
           <div className="agendCtrls-label-wrapper">
             <div className="agendCtrls-label-inline">
-              <label>Agendamento</label>
+              <label>Titulo</label>
               <input
                 type="text"
                 ref="eventName"
@@ -332,8 +456,8 @@ export default class ReactAgendaCtrl extends Component {
                 name="name"
                 className="agendCtrls-event-input"
                 value={this.state.title}
-                onChange={this.handleChangeTitle.bind(this)}
-                placeholder="Agendamento"
+                onChange={this.handleChange.bind(this)}
+                placeholder="Titulo"
               />
             </div>
             <div className="agendCtrls-label-inline">
@@ -342,24 +466,81 @@ export default class ReactAgendaCtrl extends Component {
             </div>
           </div>
           <div className="agendCtrls-label-wrapper">
+            <div>
+              <div className="agendCtrls-label-inline-collaborator">
+                <label>Procurar colaborador</label>
+                <input
+                  type="text"
+                  ref="eventName"
+                  autoFocus
+                  name="searchCollaborator"
+                  className="agendCtrls-event-input"
+                  value={this.state.searchCollaborator}
+                  onChange={this.handleChangeSearchCollaborator.bind(this)}
+                  placeholder="Nome do colaborador"
+                />
+                <button onClick={(e) => this.searchEvent(e)}>Pesquisar </button>
+              </div>
+              <div className="agendCtrls-label-inline-collaborator">
+                <label>Colaborador</label>
+                <select
+                  value={this.state.collaboratorName}
+                  onChange={this.handleChangeCollaborator.bind(this)}
+                >
+                  {this.props.collaborators.map((collaborator) => (
+                    <option
+                      id={collaborator.id}
+                      key={collaborator.id}
+                      value={collaborator.name}
+                    >
+                      {collaborator.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="agendCtrls-label-wrapper">
             <div className="agendCtrls-label-inline">
-              {this.state.collaborators.length > 0 ? (
-                <div>
-                  <label>Colaborador</label>
-                  <select
-                    value={this.state.collaborator.name}
-                    onChange={this.handleChangeCollaborator.bind(this)}
-                  >
-                    {this.state.collaborators.map((collaborator) => (
-                      <option key={collaborator.id} value={collaborator.name}>
-                        {collaborator.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ) : (
-                <div>Nada rapaz</div>
-              )}
+              <label>Local</label>
+              <input
+                type="text"
+                ref="eventName"
+                autoFocus
+                name="name"
+                className="agendCtrls-event-input"
+                value={this.state.place}
+                onChange={this.handleChangePlace.bind(this)}
+                placeholder="Rua ..."
+              />
+            </div>
+            <div className="agendCtrls-label-inline">
+              <label>Numero</label>
+              <input
+                type="text"
+                ref="eventName"
+                autoFocus
+                name="name"
+                className="agendCtrls-event-input"
+                value={this.state.placeNumber}
+                onChange={this.handleChangePlaceNumber.bind(this)}
+                placeholder="123"
+              />
+            </div>
+          </div>
+          <div className="agendCtrls-label-wrapper">
+            <div className="agendCtrls-label-inline-obs">
+              <label>Observação:</label>
+              <input
+                type="text"
+                ref="eventName"
+                autoFocus
+                name="name"
+                className="agendCtrls-event-input"
+                value={this.state.observation}
+                onChange={this.handleChangeObservation.bind(this)}
+                placeholder="Observação"
+              />
             </div>
           </div>
           <div className="agendCtrls-timePicker-wrapper">
@@ -382,8 +563,7 @@ export default class ReactAgendaCtrl extends Component {
               ></Rdate>
             </div>
           </div>
-
-          <input type="submit" value="Save" />
+          <input type="submit" value="Salvar" />
         </form>
       </div>
     );
@@ -397,6 +577,7 @@ ReactAgendaCtrl.propTypes = {
   selectedCells: PropTypes.array,
   edit: PropTypes.func,
   Addnew: PropTypes.func,
+  searchCollaborator: PropTypes.func,
 };
 
 ReactAgendaCtrl.defaultProps = {
